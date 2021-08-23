@@ -36,8 +36,8 @@ def checkWin(board, disk):
             if board[r][c] == disk and board[r][c+1] == disk and board[r][c+2] == disk and board[r][c+3] == disk:
                 return True
     #check vertical
-    for c in range(COLUMNS-3):
-        for r in range(ROWS):
+    for c in range(COLUMNS):
+        for r in range(ROWS-3):
             if board[r][c] == disk and board[r+1][c] == disk and board[r+2][c] == disk and board[r+3][c] == disk:
                 return True
 
