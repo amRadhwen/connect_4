@@ -1,7 +1,7 @@
 from numpy import zeros, flip
 from sys import exit
 from math import floor
-import pygame
+from pygame import draw, display, font, init, event, QUIT, MOUSEBUTTONDOWN, MOUSEMOTION
 
 GREEN = (000,255,000)
 RED = (255,000,000)
@@ -56,16 +56,16 @@ def checkWin(board, disk):
 def drawBoard(board):
     for c in range(COLUMNS):
         for r in range(ROWS):
-            pygame.draw.rect(screen, PURPLE, (c * DISKSIZE, r*DISKSIZE+DISKSIZE, DISKSIZE, DISKSIZE))
-            pygame.draw.circle(screen, BLACK, (int(c*DISKSIZE+DISKSIZE/2), int(r*DISKSIZE+DISKSIZE+DISKSIZE/2)), RADIUS)
+            draw.rect(screen, PURPLE, (c * DISKSIZE, r*DISKSIZE+DISKSIZE, DISKSIZE, DISKSIZE))
+            draw.circle(screen, BLACK, (int(c*DISKSIZE+DISKSIZE/2), int(r*DISKSIZE+DISKSIZE+DISKSIZE/2)), RADIUS)
     
     for c in range(COLUMNS):
         for r in range(ROWS):
             if board[r][c] == 1:
-                pygame.draw.circle(screen, RED, (int(c*DISKSIZE+DISKSIZE/2), height - int(r*DISKSIZE+DISKSIZE/2)), RADIUS)
+                draw.circle(screen, RED, (int(c*DISKSIZE+DISKSIZE/2), height - int(r*DISKSIZE+DISKSIZE/2)), RADIUS)
             elif board[r][c] == 2:
-                pygame.draw.circle(screen, GREEN, (int(c*DISKSIZE+DISKSIZE/2), height - int(r*DISKSIZE+DISKSIZE/2)), RADIUS)
-    pygame.display.update()
+                draw.circle(screen, GREEN, (int(c*DISKSIZE+DISKSIZE/2), height - int(r*DISKSIZE+DISKSIZE/2)), RADIUS)
+    display.update()
 
 
 
@@ -75,7 +75,7 @@ turn = True
 
 printBoard(board)
 
-pygame.init()
+init()
 
 DISKSIZE = 100
 
@@ -85,48 +85,48 @@ height = (ROWS+1) * DISKSIZE
 size = (width, height)
 RADIUS = int(DISKSIZE/2 - 5)
 
-screen = pygame.display.set_mode(size)
+screen = display.set_mode(size)
 drawBoard(board)
-pygame.display.update()
+display.update()
 
-FONT = pygame.font.SysFont("monospace", 50)
+FONT = font.SysFont("monospace", 50)
 
 
 #game starts here
 while not gameEnd:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for _event in event.get():
+        if _event.type == QUIT:
             exit()
 
-        if event.type == pygame.MOUSEMOTION:
-            pygame.draw.rect(screen, BLACK, (0, 0, width, DISKSIZE))
-            posx = event.pos[0]
+        if _event.type == MOUSEMOTION:
+            draw.rect(screen, BLACK, (0, 0, width, DISKSIZE))
+            posx = _event.pos[0]
             if turn:
-                pygame.draw.circle(screen, RED, (posx, int(DISKSIZE/2)), RADIUS)
+                draw.circle(screen, RED, (posx, int(DISKSIZE/2)), RADIUS)
             else:
-                pygame.draw.circle(screen, GREEN, (posx, int(DISKSIZE/2)), RADIUS)
-        pygame.display.update()
+                draw.circle(screen, GREEN, (posx, int(DISKSIZE/2)), RADIUS)
+        display.update()
                 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if _event.type == MOUSEBUTTONDOWN:
             #print(event.pos)
             #Player one turn
             if turn:
-                posx = event.pos[0]
+                posx = _event.pos[0]
                 col = int(floor(posx/DISKSIZE))
                 #col = int(input("Player 1 turn: "))
                 if checkPlayerChoice(board, col):
                     row = getNextValidRow(board, col)
                     createDisk(board, row, col, 1)
                     if checkWin(board, 1):
-                        pygame.draw.rect(screen, BLACK, (0, 0, width, DISKSIZE))
+                        draw.rect(screen, BLACK, (0, 0, width, DISKSIZE))
                         label = FONT.render("Player 1 wins !!!", 1, RED)
                         screen.blit(label, (40,10))
                         gameEnd = True
             
             #Player two turn
             else:
-                posx = event.pos[0]
+                posx = _event.pos[0]
                 col = int(floor(posx/DISKSIZE))
                 #col = int(input("player 2 turn: "))
                 
@@ -134,7 +134,7 @@ while not gameEnd:
                     row = getNextValidRow(board, col)
                     createDisk(board, row, col, 2)
                     if checkWin(board, 2):
-                        pygame.draw.rect(screen, BLACK, (0, 0, width, DISKSIZE))
+                        draw.rect(screen, BLACK, (0, 0, width, DISKSIZE))
                         label = FONT.render("Player 2 wins !!!", 1, GREEN)
                         screen.blit(label, (40,10))
                         gameEnd = True
@@ -145,4 +145,4 @@ while not gameEnd:
             turn = not turn
 
             if gameEnd:
-                pass#pygame.time.wait(3000)
+                pass#time.wait(3000)
