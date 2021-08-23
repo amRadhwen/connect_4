@@ -7,8 +7,8 @@ GREEN = (000,255,000)
 RED = (255,000,000)
 BLACK = (000,000,000)
 PURPLE = (46, 49, 146)
-ROWS = 4
-COLUMNS = 5
+ROWS = 5
+COLUMNS = 6
 
 def initBoard():
     return zeros((ROWS, COLUMNS))
@@ -43,8 +43,14 @@ def checkWin(board, disk):
 
     #positive diagnols
     for c in range(COLUMNS-3):
+        for r in range(ROWS-3):
+            if board[r][c] == disk and board[r+1][c+1] == disk and board[r+2][c+2] == disk and board[r+3][c+3] == disk:
+                return True
+    
+    #negative diagnols
+    for c in range(COLUMNS-3):
         for r in range(3, ROWS):
-            if board[r][c] == disk and board[r-1][c+1] == disk and board[r-1][c+2] == disk and board[r-1][c+3] == disk:
+            if board[r][c] == disk and board[r-1][c+1] == disk and board[r-2][c+2] == disk and board[r-3][c+3] == disk:
                 return True
 
 def drawBoard(board):
@@ -139,4 +145,4 @@ while not gameEnd:
             turn = not turn
 
             if gameEnd:
-                pygame.time.wait(3000)
+                pass#pygame.time.wait(3000)
